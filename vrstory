@@ -1,0 +1,53 @@
+#!/bin/sh
+
+if [ $1 ]
+then
+	case "$1" in
+    new)
+    	if [ $2 ]
+			then
+    		mkdir $2
+    		mkdir $2/assets
+    		mkdir $2/config
+    		mkdir $2/assets/scripts
+    		mkdir $2/assets/scripts/vendor
+    		mkdir $2/assets/scripts/custom
+    		mkdir $2/assets/stylesheets
+    		mkdir $2/assets/img
+			else
+    		echo "Please include a name for the folder"
+			fi
+    ;;
+    stub)
+			echo > assets/scripts/application.js
+    	cat ~/bin/sample.html > index.html
+    ;;
+		compile)
+			ruby ~/bin/html_interpreter.rb ./
+		;;
+		run)
+			open ./.interpreted.html
+		;;
+		background)
+			if [ $2 ]
+			then
+				if [ $3 ]
+				then
+					cp $2 ./assets/img/$3
+					ruby ~/bin/background_loader.rb ./ $3
+					cat ~/bin/temp.html > ./index.html
+					rm ~/bin/temp.html
+				else
+					echo "Please include a name for the asset"
+				fi
+			else
+				echo "Please include path to asset"
+			fi
+		;;
+    *)
+        echo "Error: Wrong argument"
+    ;;
+	esac
+else
+    echo "Error: No arguments passed to vrstory";
+fi
